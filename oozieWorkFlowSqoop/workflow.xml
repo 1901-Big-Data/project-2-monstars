@@ -1,0 +1,44 @@
+<workflow-app name="oozie-lab" xmlns="uri:oozie:workflow:0.4">
+    <!-- Start job control node -->
+   <start to="SQOOP-IMPORT" />
+  <kill name="Kill">
+        <message>Action failed, error message[${wf:errorMessage(wf:lastErrorNode())}]</message>
+    </kill>
+      <action name="SQOOP-IMPORT">
+         <sqoop xmlns="uri:oozie:sqoop-action:0.2">
+	<job-tracker>${job_tracker}</job-tracker>
+	<name-node>${name_node}</name-node>
+    	<prepare>
+                <delete path="${name_node}/user/cloudera/kickstarter/sqoopimport"/>
+            </prepare>
+        <job-xml>hive-site.xml</job-xml>
+	<configuration>
+	<property> 
+	<name>oozie.launcher.mapreduce.map.java.opts</name> 
+	<value>-verbose</value> 
+	</property> 
+	 </configuration>
+	<command>import --connect jdbc:mysql://ec2-3-90-156-154.compute-1.amazonaws.com:3306/kickstarter --username stevelv --password legomation1337 --table kickstart --target-dir ${name_node}/user/cloudera/kickstarter/sqoopimport/ --hive-import -m 1</command>
+          </sqoop>
+          <ok to="End" />
+          <error to="Kill" />
+       </action>
+    <!--Hive Query 
+	<action name="hive">
+        <hive xmlns="uri:oozie:hive-action:0.4">
+	<job-tracker>${job_tracker}</job-tracker>
+            <name-node>${name_node}</name-node>
+               Set up connection to the actual Hive Metastore 
+	  <configuration>
+	    <property>
+	       <name>hive.metastore.uris</name>
+	       <value>thrift://localhost:9083</value>
+	    </property>
+	  </configuration>
+            <script>${scripts_location}/hive-a702.sql</script>
+        </hive> 
+    <ok to="End"/>
+        <error to="Kill"/>
+    </action>                                       -->
+    <end name="End"/>
+</workflow-app>
