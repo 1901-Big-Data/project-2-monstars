@@ -1,40 +1,30 @@
-select count(campaign)
-from kickstartCopy
-where goal > 10000;
---122897(total)
+select (success.numerator/total.denominator) * 100
+from 
+(SELECT count(*) numerator from kickstart where usd_goal_real < 100 and campaign_state='successful') success 
+join
+(SELECT count(*) denominator from kickstart where usd_goal_real < 100) total;
 
-select count(campaign)
-from kickstartCopy
-where goal > 1000 and goal < 10000;
---165823(total)
+select (success.numerator/total.denominator) * 100
+from 
+(SELECT count(*) numerator from kickstart where usd_goal_real between 100 and 1000 and campaign_state='successful') success 
+join
+(SELECT count(*) denominator from kickstart where usd_goal_real between 100 and 1000) total;
 
-select count(campaign)
-from kickstartCopy
-where goal > 100 and goal < 1000;
---40317(total)
+select (success.numerator/total.denominator) * 100
+from 
+(SELECT count(*) numerator from kickstart where usd_goal_real between 1000 and 10000 and campaign_state='successful') success 
+join
+(SELECT count(*) denominator from kickstart where usd_goal_real between 1000 and 10000) total;
 
-select count(campaign)
-from kickstartCopy
-where goal < 100;
---4181(total)
+select (success.numerator/total.denominator) * 100
+from 
+(SELECT count(*) numerator from kickstart where usd_goal_real between 10000 and 100000 and campaign_state='successful') success 
+join
+(SELECT count(*) denominator from kickstart where usd_goal_real between 10000 and 100000) total;
 
---What is the percentage of success based on the funding goal amount?
-select count(campaign)
-from kickstartCopy
-where campaign_state = "successful" and goal > 10000;
---28111(success), 122897(total) -> 23% Success Rate
+select (success.numerator/total.denominator) * 100
+from 
+(SELECT count(*) numerator from kickstart where usd_goal_real > 100000 and campaign_state='successful') success 
+join
+(SELECT count(*) denominator from kickstart where usd_goal_real > 100000) total;
 
-select count(campaign)
-from kickstartCopy
-where campaign_state = "successful" and goal > 1000 and goal < 10000;
---66896(success), 165823(total) -> 40% Success Rate
-
-select count(campaign)
-from kickstartCopy
-where campaign_state = "successful" and goal > 100 and goal < 1000;
---20330(success), 40317(total) -> 50% Success Rate
-
-select count(campaign)
-from kickstartCopy
-where campaign_state = "successful" and goal < 100;
---2175(success), 4181(total) -> 52% Success Rate
