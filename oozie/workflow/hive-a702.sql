@@ -1,7 +1,7 @@
 USE default;
 
 DROP TABLE IF EXISTS backersDimension;
-DROP TABLE IF EXISTS fundingDimension
+DROP TABLE IF EXISTS fundingDimension;
 DROP TABLE IF EXISTS successFailureDimension;
 DROP TABLE IF EXISTS topCampaignsDimension;
 
