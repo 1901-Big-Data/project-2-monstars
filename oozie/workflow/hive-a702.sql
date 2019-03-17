@@ -1,9 +1,30 @@
 USE default;
 
+
+
+create table backersDimension as
+select campaign, specific_category, backers
+from kickstart;
+
+
+create table fundingDimension as
+select campaign, specific_category, usd_pledged_real
+from kickstart;
+
+
+create table successFailureDimension as
+select campaign, specific_category, campaign_state
+from kickstart;
+
+
+create table topCampaignsDimension as
+select campaign, backers, usd_pledged
+from kickstart;
+
 INSERT OVERWRITE LOCAL DIRECTORY '/home/cloudera/Documents/HiveOutput/Q1'
 row format delimited fields terminated by ',' 
 select specific_category, sum(backers) as sumB
-from kickstart
+from backersDimension
 group by specific_category
 order by sumB desc
 limit 5;
@@ -11,7 +32,7 @@ limit 5;
 INSERT OVERWRITE LOCAL DIRECTORY '/home/cloudera/Documents/HiveOutput/Q2'
 row format delimited fields terminated by ','
 select specific_category, sum(usd_pledged_real) as sumUSD
-from kickstart
+from fundingDimension
 group by specific_category
 order by sumUSD desc
 limit 5;
@@ -19,7 +40,7 @@ limit 5;
 INSERT OVERWRITE LOCAL DIRECTORY '/home/cloudera/Documents/HiveOutput/Q3'
 row format delimited fields terminated by ','
 SELECT specific_category, COUNT(*) numOfFailures 
-from kickstart 
+from successFailureDimension 
 where campaign_state = 'failed' 
 group by specific_category 
 order by numOfFailures desc 
@@ -28,7 +49,7 @@ limit 5;
 INSERT OVERWRITE LOCAL DIRECTORY '/home/cloudera/Documents/HiveOutput/Q3-2'
 row format delimited fields terminated by ','
 SELECT specific_category, COUNT(*) numOfSuccessful
-from kickstart
+from successFailureDimension
 where campaign_state = 'successful'
 group by specific_category
 order by numOfSuccessful desc
@@ -37,7 +58,7 @@ limit 5;
 INSERT OVERWRITE LOCAL DIRECTORY '/home/cloudera/Documents/HiveOutput/Q4'
 row format delimited fields terminated by ','
 SELECT DISTINCT campaign, backers, usd_pledged 
-FROM kickstart 
+FROM topCampaignsDimension 
 order by usd_pledged desc 
 limit 100;
 

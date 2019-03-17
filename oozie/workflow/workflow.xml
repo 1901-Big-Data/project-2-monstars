@@ -1,9 +1,27 @@
 <workflow-app name="oozie-lab" xmlns="uri:oozie:workflow:0.4">
     <!-- Start job control node -->
-   <start to="SQOOP-IMPORT" />
+   <start to="shell" />
   <kill name="Kill">
         <message>Action failed, error message[${wf:errorMessage(wf:lastErrorNode())}]</message>
     </kill>
+<!--Shell Script Prepares Output Directories -->
+    <action name="shell">
+        <shell xmlns="uri:oozie:shell-action:0.2">
+   	<job-tracker>${job_tracker}</job-tracker>
+           <name-node>${name_node}</name-node>
+	<configuration>
+	<property> 
+	<name>oozie.launcher.mapreduce.map.java.opts</name> 
+	<value>-verbose</value> 
+	</property> 
+	 </configuration>
+            <exec>OutputDirectories.sh</exec>
+            <file>${scripts_location}/OutputDirectories.sh</file>
+            <capture-output/>
+        </shell>
+       <ok to="SQOOP-IMPORT"/>
+        <error to="Kill"/>
+    </action>
       <action name="SQOOP-IMPORT">
          <sqoop xmlns="uri:oozie:sqoop-action:0.2">
 	<job-tracker>${job_tracker}</job-tracker>
