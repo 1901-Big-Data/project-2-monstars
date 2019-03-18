@@ -1,0 +1,14 @@
+--2
+--What specific project category receives the most funding?
+select specific_category, sum(usd_pledged_real) as sumUSD
+from kickstartCopy
+group by specific_category
+order by sumUSD desc
+limit 5;
+--
+1	Product Design	636995265.72999918
+2	Tabletop Games	463732981.61999935
+3	Video Games	216253683.94000044
+4	Hardware	158526947.25999999
+5	Technology	142137464.46000019
+
