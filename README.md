@@ -8,3 +8,6 @@ Questions that guided our analysis:
 5. What is the percentage of success based on the length of the project?
 6. What is the percentage of success based on the funding goal amount?
 7. Finally, what type of project grants investors the highest probability of success?
+
+Source:
+Kaggle Dataset: Kickstarter Projects: https://www.kaggle.com/kemical/kickstarter-projects 
