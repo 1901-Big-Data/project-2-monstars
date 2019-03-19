@@ -1,0 +1,1 @@
+SELECT specific_category, COUNT(*) numOfFailures from kickstart where campaign_state = 'failed' group by specific_category order by numOfFailures desc;

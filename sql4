@@ -1,0 +1,1 @@
+SELECT DISTINCT campaign, backers, usd_pledged FROM kickstart order by usd_pledged desc limit 100;

@@ -1,0 +1,13 @@
+--1
+--What specific project category receives the most backers?
+select specific_category, sum(backers) as sumB
+from kickstartCopy
+group by specific_category
+order by sumB desc
+limit 5;
+--Answer: Top 3:
+1  	chProduct Design	6178913
+2	Tabletop Games	6049205
+3	Video Games	4419505
+4	Documentary	1447677
+5	Technology	1155297
